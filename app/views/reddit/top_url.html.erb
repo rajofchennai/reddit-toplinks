@@ -1,0 +1,8 @@
+<% @feeds.each do |feed| %>
+  <a href=<%= feed['data']['url'] %>><%= feed['data']['title'] %></a>
+  author: <a href=<%= "http://www.reddit.com/user/#{feed['data']['author']}"%>><%= feed['data']['author']%></a>
+  created_at: <%= feed['data']['created_at'] %>
+  <% if feed['data']['subreddit'] == "pics" %>
+    <img src=<%= feed['data']['url'] %>/>
+  <% end %>
+<% end %>
