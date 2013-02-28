@@ -1,5 +1,4 @@
-require File.expand_path("../../../config/environment", __FILE__)
-require 'rspec/rails'
+require 'spec_helper'
 
 describe "Routes" do
   it "root and any random url except /reddit/top_url should route to reddit index" do

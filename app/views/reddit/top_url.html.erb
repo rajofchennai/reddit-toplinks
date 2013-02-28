@@ -1,8 +1,26 @@
-<% @feeds.each do |feed| %>
-  <a href=<%= feed['data']['url'] %>><%= feed['data']['title'] %></a>
-  author: <a href=<%= "http://www.reddit.com/user/#{feed['data']['author']}"%>><%= feed['data']['author']%></a>
-  created_at: <%= feed['data']['created_at'] %>
-  <% if feed['data']['subreddit'] == "pics" %>
-    <img src=<%= feed['data']['url'] %>/>
+<% if session[:email] %>
+<div style="text-align:left;"><%= session[:email] %> </div>
+<div style="text-align:left;"><a href="/logout">logout</a></div>
+<% else %>
+<div style="text-align:left;"><a href="/login">login</a></div>
+<% end %>
+
+<% if @feeds %>
+  <a href="/reddit/top_url?before=<%=@feeds[0]['data']['name']%>&page=<%=@page-1%>">previous</a>
+  <a href="/reddit/top_url?after=<%=@feeds.last['data']['name']%>&page=<%=@page+1%>">next</a>
+<table>
+  <% @feeds.each do |feed| %>
+    <tr>
+    <td> <a href=<%= feed['data']['url'] %>><%= feed['data']['title'] %></a> </td>
+    <td> <a href=<%= "http://www.reddit.com/user/#{feed['data']['author']}"%>><%= feed['data']['author']%></a> </td>
+    <td> <%= Time.at(feed['data']['created_utc']).strftime("%d %B %Y, %I:%M %p") %> </td>
+    <td> <% if(feed['data']['subreddit'] == "pics" || %r{imgur.*jpg$}.match(feed['data']['url'])) %>
+      <img src=<%= feed['data']['url'] %> height=100 width=100 />
+    <% end %> </td>
+    </tr>
   <% end %>
+  </table>
+<% else %>
+  You seemed to have reached the end
+  <a href="/reddit/top_url">home</a>
 <% end %>

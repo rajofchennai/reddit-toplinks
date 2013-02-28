@@ -6,17 +6,13 @@ class RedditController < ApplicationController
   end
 
   def top_url
-    if params[:page]
-      @page = params[:page].to_i
-      unless(@page >=1 && @page <= MAX_PAGES)
-        @page = 1
-      end
-    else
-      @page = 1
+    parameters = "limit=#{PAGE_SIZE}"
+    parameters << "&after=#{params[:after]}" if params[:after]
+    parameters << "&before=#{params[:before]}" if params[:before]
+    @page = 1
+    @page = params[:page].to_i if params[:page]
+    if @page <= MAX_PAGES && @page > 0
+      @feeds = JSON.parse(RestClient.get("http://www.reddit.com/top.json?#{parameters}"))['data']['children']
     end
-
-    @top_feeds = JSON.parse(RestClient.get("http://www.reddit.com/top.json?limit=#{MAX_PAGES*PAGE_SIZE}"))['data']['children']
-
-    @feeds = top_feeds[(@page-1)*PAGE_SIZE..(@page*PAGE_SIZE - 1)]
   end
 end
