@@ -6,8 +6,8 @@
 <% end %>
 
 <% if @feeds %>
-  <a href="/reddit/top_url?before=<%=@feeds[0]['data']['name']%>&page=<%=@page-1%>">previous</a>
-  <a href="/reddit/top_url?after=<%=@feeds.last['data']['name']%>&page=<%=@page+1%>">next</a>
+  <a href=<%=@previous_page%>>previous</a>
+  <a href=<%=@next_page%>>next</a>
 <table>
   <% @feeds.each do |feed| %>
     <tr>
